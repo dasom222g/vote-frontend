@@ -3,7 +3,7 @@ import React, { FC, useEffect, useState } from 'react'
 const Main: FC = () => {
   return (
     <>
-      <div>Main</div>
+      <div className="text-3xl font-bold underline">Main</div>
     </>
   )
 }
