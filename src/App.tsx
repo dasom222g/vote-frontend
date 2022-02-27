@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useEffect } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Main from './routes/main'
 

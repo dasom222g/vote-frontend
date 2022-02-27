@@ -1,9 +1,12 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC } from 'react'
+import { Candidate } from '../components/Candidate'
 
 const Main: FC = () => {
   return (
     <>
-      <div className="text-3xl font-bold underline">Main</div>
+      <div className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 h-full p-4">
+        <Candidate />
+      </div>
     </>
   )
 }
