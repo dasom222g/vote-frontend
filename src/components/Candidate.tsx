@@ -1,6 +1,12 @@
 import React, { FC } from 'react'
+import { ICandidate } from '../lib/type'
 
-export const Candidate: FC = () => {
+interface CandidateProps {
+  candidate: ICandidate
+}
+
+export const Candidate: FC<CandidateProps> = ({candidate}) => {
+  const {name, description} = candidate
   return (
     <>
       <label htmlFor="lee" className="block mt-4 first:mt-0">
@@ -16,12 +22,11 @@ export const Candidate: FC = () => {
           <div className="pl-6 space-y-2">
             <blockquote>
               <p className="text-sm text-white leading-4">
-                “국민의 요구를 듣고 실천하는 것 이것이 이재명의
-                경제대통령입니다.”
+                {description}
               </p>
             </blockquote>
             <figcaption>
-              <div className="text-sm font-bold text-sky-200">이재명</div>
+              <div className="text-sm font-bold text-sky-200">{name}</div>
               {/* <div className="text-slate-300">
                 득표수: ??
               </div> */}
