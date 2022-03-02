@@ -69,7 +69,7 @@ const Main: FC = () => {
   return (
     <>
       <div className="bg-gradient-to-r from-blue-700 to-purple-700 h-full p-4 flex flex-col">
-        <h1 className="text-slate-100 text-lg font-bold py-2 pb-4">
+        <h1 className="text-white text-lg font-bold py-2 pb-4">
           Vote the Winner
         </h1>
         <div className="h-full overflow-auto">
