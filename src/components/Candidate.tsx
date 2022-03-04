@@ -3,11 +3,13 @@ import { ICandidate } from '../lib/type'
 
 interface CandidateProps {
   candidate: ICandidate
+  selectCandidate: (id: number, item: ICandidate) => void
 }
 
-export const Candidate: FC<CandidateProps> = ({candidate}) => {
+export const Candidate: FC<CandidateProps> = ({candidate, selectCandidate}) => {
   const {id, name, description, imageName} = candidate
-  // bg-opacity-20
+
+  // view
   return (
     <>
       <label htmlFor={name + id} className="block relative first:border-transparent">
@@ -17,6 +19,7 @@ export const Candidate: FC<CandidateProps> = ({candidate}) => {
           name="candidate"
           value="lee"
           className="invisible absolute"
+          onChange={() => id && selectCandidate(id, candidate)}
         />
         <figure className="flex items-center rounded-xl p-4 border-white-100 h-32 bg-white bg-opacity-0 peer-checked:bg-opacity-20 hover:cursor-pointer transition-all duration-300">
           <img className="w-24 h-24 rounded-full" src={`images/${imageName}`} alt="" />
