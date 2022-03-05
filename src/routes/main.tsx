@@ -2,14 +2,14 @@ import { ethers } from 'ethers'
 import React, { FC, useEffect, useState } from 'react'
 import { Candidate } from '../components/Candidate'
 import { ICandidate } from '../lib/type'
-// import { candidateList as candidateListData } from '../lib/data'
+// import { candidateList as CANDIDATE_LIST_DATA } from '../lib/data'
 import { votingContract } from '../web3Config'
 
 const Main: FC = () => {
   const [account, setAccount] = useState<string>('')
   // const [sendDataList, setSendDataList] = useState<ICandidate[]>([])
   const [candidateList, setCandidateList] = useState<ICandidate[]>([])
-  const [selectedCandidate, setSelectedCandidate] = useState<ICandidate>()
+  const [selectedCandidate, setSelectedCandidate] = useState<ICandidate | null>(null)
 
   const getAccount = async () => {
     try {
@@ -28,10 +28,11 @@ const Main: FC = () => {
   }
 
   // const setData = () => {
-  //   setSendDataList(candidateListData)
+  //   setSendDataList(CANDIDATE_LIST_DATA)
   // }
 
   // const sendDateList = async () => {
+  //   console.log('list', sendDataList)
   //   if (!account || !sendDataList.length) return
   //   try {
   //     const res = await votingContract.methods.setCandidates(sendDataList).send({from: account})
@@ -79,7 +80,7 @@ const Main: FC = () => {
   const getCount = async (): Promise<void> => {
     try {
       const count = selectedCandidate && await votingContract.methods.getCanditeNumberOfVotes(selectedCandidate && selectedCandidate.id).call()
-      console.log('selectedCandidate.id', selectedCandidate && selectedCandidate.id, count)
+      console.log('selectedCandidate.id', selectedCandidate && selectedCandidate.id, selectedCandidate && typeof selectedCandidate.id, count)
     } catch(error) {
       console.error(error)
     }
@@ -94,7 +95,7 @@ const Main: FC = () => {
   return (
     <>
       <form onSubmit={handleSubmit} className="h-full">
-        <div className="bg-gradient-to-r from-blue-700 to-purple-700 h-full p-4 flex flex-col">
+        <div className="h-full p-4 flex flex-col">
           <h1 className="text-white text-lg font-bold py-2 pb-4">
             Vote the Winner
           </h1>

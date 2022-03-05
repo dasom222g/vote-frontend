@@ -12,7 +12,7 @@ export const Candidate: FC<CandidateProps> = ({candidate, selectCandidate}) => {
   // view
   return (
     <>
-      <label htmlFor={name + id} className="block relative first:border-transparent">
+      <label htmlFor={name + id} className="block relative first:pt-px">
         <input
           type="radio"
           id={name + id}
@@ -21,7 +21,7 @@ export const Candidate: FC<CandidateProps> = ({candidate, selectCandidate}) => {
           className="invisible absolute"
           onChange={() => id && selectCandidate(id, candidate)}
         />
-        <figure className="flex items-center rounded-xl p-4 border-white-100 h-32 bg-white bg-opacity-0 peer-checked:bg-opacity-20 hover:cursor-pointer transition-all duration-300">
+        <figure className="flex items-center rounded-xl p-4 border-white-100 h-32 bg-white bg-opacity-0 border border-opacity-0 peer-checked:bg-opacity-20 peer-checked:border-opacity-100 peer-checked:-mt-px hover:cursor-pointer transition-all duration-300">
           <img className="w-24 h-24 rounded-full" src={`images/${imageName}`} alt="" />
           <div className="pl-6 space-y-2">
             <blockquote>
