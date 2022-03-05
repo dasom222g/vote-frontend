@@ -79,8 +79,10 @@ const Main: FC = () => {
 
   const getCount = async (): Promise<void> => {
     try {
-      const count = selectedCandidate && await votingContract.methods.getCanditeNumberOfVotes(selectedCandidate && selectedCandidate.id).call()
+      const count = selectedCandidate && await votingContract.methods.getCountById(selectedCandidate.id).call()
+      const votingStatusList = await votingContract.methods.getVotingStatusList().call()
       console.log('selectedCandidate.id', selectedCandidate && selectedCandidate.id, selectedCandidate && typeof selectedCandidate.id, count)
+      console.log('votingStatusList', votingStatusList)
     } catch(error) {
       console.error(error)
     }

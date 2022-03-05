@@ -199,7 +199,7 @@ const votingABI: AbiItem[] = [
 		"type": "function"
 	}
 ]
-export const votingContractAddress = '0x9b079e242fF94DE0d8467De20C5201EDAE76845a'
+export const votingContractAddress = '0x528f35d4fFf66bcC128770dC9A7aCF654eBa98ee'
 
 export const web3 = new Web3(window.ethereum)
 export const votingContract = new web3.eth.Contract(votingABI, votingContractAddress)
