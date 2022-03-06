@@ -5,27 +5,16 @@ import { ICandidate } from '../lib/type'
 // import { candidateList as CANDIDATE_LIST_DATA } from '../lib/data'
 import { votingContract } from '../web3Config'
 
-const Main: FC = () => {
-  const [account, setAccount] = useState<string>('')
+interface MainProps {
+  account: string
+}
+
+const Main: FC<MainProps> = ({ account }) => {
   // const [sendDataList, setSendDataList] = useState<ICandidate[]>([])
   const [candidateList, setCandidateList] = useState<ICandidate[]>([])
   const [selectedCandidate, setSelectedCandidate] = useState<ICandidate | null>(null)
 
-  const getAccount = async () => {
-    try {
-      if (window.ethereum) { // metamask설치되어 있는경우
-        // 브라우저에서 metamask 연결 요청하여 account배열 get
-        const accounts: string[] = await window.ethereum.request({
-          method: 'eth_requestAccounts'
-        })
-        setAccount(accounts[0])
-        return
-      }
-      alert('Install Meta Mask!') // metamask 설치되지 않은 경우
-    } catch (error) {
-      console.error(error)
-    }
-  }
+  
 
   // const setData = () => {
   //   setSendDataList(CANDIDATE_LIST_DATA)
@@ -70,6 +59,11 @@ const Main: FC = () => {
     e.preventDefault()
     if (!account) return
     try {
+      const isValid = await votingContract.methods.isValidVotingTime(account).call()
+      if (!isValid) {
+        getRemaingSeconds()
+        return
+      }
       const res = selectedCandidate && await votingContract.methods.vote(selectedCandidate.id).send({from: account})
       console.log(res.status)
     } catch(error) {
@@ -79,17 +73,32 @@ const Main: FC = () => {
 
   const getCount = async (): Promise<void> => {
     try {
-      const count = selectedCandidate && await votingContract.methods.getCountById(selectedCandidate.id).call()
+      // const count = selectedCandidate && await votingContract.methods.getCountById(selectedCandidate.id).call()
       const votingStatusList = await votingContract.methods.getVotingStatusList().call()
-      console.log('selectedCandidate.id', selectedCandidate && selectedCandidate.id, selectedCandidate && typeof selectedCandidate.id, count)
       console.log('votingStatusList', votingStatusList)
     } catch(error) {
       console.error(error)
     }
   }
 
+  const getRemaingSeconds = async () => {
+    try {
+      const remainingSeconds = await votingContract.methods.getRemaingSeconds(account).call()
+      console.log('remainingSeconds', remainingSeconds)
+    } catch(error) {
+      console.error(error)
+    }
+  }
+  const getIsVoted = async () => {
+    try {
+      const isVoted = await votingContract.methods.isVoted(account).call()
+      console.log('isVoted', isVoted)
+    } catch(error) {
+      console.error(error)
+    }
+  }
+
   useEffect(() => {
-    getAccount()
     getCandidateList()
   }, [])
 
@@ -152,6 +161,15 @@ const Main: FC = () => {
               onClick={getCount}
             >
               Get Count
+            </button>
+          </div>
+          <div className="mt-4">
+            <button
+              type="button"
+              className="bg-gradient-to-r from-indigo-500 via-pink-600 to-pink-500 text-slate-100 font-bold text-sm rounded-md w-full py-3 text-white"
+              onClick={getIsVoted}
+            >
+              getIsVoted
             </button>
           </div>
         </div>
