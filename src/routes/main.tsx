@@ -61,6 +61,7 @@ const Main: FC<MainProps> = ({ account }) => {
     try {
       const isValid = await votingContract.methods.isValidVotingTime(account).call()
       if (!isValid) {
+        console.log(`can't vote`)
         getRemaingSeconds()
         return
       }
