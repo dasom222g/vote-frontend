@@ -1,6 +1,7 @@
 import React, { FC, useEffect, useState } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Main from './routes/main'
+import Complete from './routes/complete'
 
 const App: FC = () => {
   const [account, setAccount] = useState<string>('')
@@ -30,6 +31,7 @@ const App: FC = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Main account={account} />} />
+        <Route path="/complete" element={<Complete account={account} />} />
       </Routes>
     </BrowserRouter>
   )

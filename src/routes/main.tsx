@@ -52,6 +52,7 @@ const Main: FC<MainProps> = ({ account }) => {
   }
 
   const selectCandidate = (id: number, item: ICandidate) => {
+    console.log('onchange')
     setSelectedCandidate(item)
   }
 
@@ -72,28 +73,10 @@ const Main: FC<MainProps> = ({ account }) => {
     }
   }
 
-  const getCount = async (): Promise<void> => {
-    try {
-      // const count = selectedCandidate && await votingContract.methods.getCountById(selectedCandidate.id).call()
-      const votingStatusList = await votingContract.methods.getVotingStatusList().call()
-      console.log('votingStatusList', votingStatusList)
-    } catch(error) {
-      console.error(error)
-    }
-  }
-
   const getRemaingSeconds = async () => {
     try {
       const remainingSeconds = await votingContract.methods.getRemaingSeconds(account).call()
       console.log('remainingSeconds', remainingSeconds)
-    } catch(error) {
-      console.error(error)
-    }
-  }
-  const getIsVoted = async () => {
-    try {
-      const isVoted = await votingContract.methods.isVoted(account).call()
-      console.log('isVoted', isVoted)
     } catch(error) {
       console.error(error)
     }
@@ -153,24 +136,6 @@ const Main: FC<MainProps> = ({ account }) => {
               className="bg-gradient-to-r from-indigo-500 via-pink-600 to-pink-500 text-slate-100 font-bold text-sm rounded-md w-full py-3 text-white"
             >
               Vote
-            </button>
-          </div>
-          <div className="mt-4">
-            <button
-              type="button"
-              className="bg-gradient-to-r from-indigo-500 via-pink-600 to-pink-500 text-slate-100 font-bold text-sm rounded-md w-full py-3 text-white"
-              onClick={getCount}
-            >
-              Get Count
-            </button>
-          </div>
-          <div className="mt-4">
-            <button
-              type="button"
-              className="bg-gradient-to-r from-indigo-500 via-pink-600 to-pink-500 text-slate-100 font-bold text-sm rounded-md w-full py-3 text-white"
-              onClick={getIsVoted}
-            >
-              getIsVoted
             </button>
           </div>
         </div>
