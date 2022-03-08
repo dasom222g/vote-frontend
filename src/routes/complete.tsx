@@ -1,7 +1,9 @@
-import React, { FC, useCallback, useEffect, useLayoutEffect, useState } from 'react'
+import { ethers } from 'ethers'
+import React, { FC, useCallback, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 // import { ethers } from 'ethers'
 import { WinnerCard } from '../components/WinnerCard'
+import { ICountItem } from '../lib/type'
 import { votingContract } from '../web3Config'
 
 interface CompleteProps {
@@ -10,6 +12,7 @@ interface CompleteProps {
 
 const Complete: FC<CompleteProps> = ({ account }) => {
   const [isVoted, setIsVoted] = useState<boolean | null>(null)
+  const [winnerList, setWinnerList] = useState<ICountItem[]>([])
 
 
   // const getRemaingSeconds = async () => {
@@ -23,8 +26,17 @@ const Complete: FC<CompleteProps> = ({ account }) => {
 
   const getCount = async (): Promise<void> => {
     try {
-      const votingStatusList = await votingContract.methods.getVotingStatusList().call()
-      console.log('votingStatusList', votingStatusList)
+      const votingStatusList: ICountItem[] = await votingContract.methods.getVotingStatusList().call()
+      const parseList = votingStatusList.map(item => {
+        return {
+          ...item,
+          id: Number(item.id),
+          name: ethers.utils.parseBytes32String(item.name),
+          count: Number(item.count),
+        }
+      }) 
+      const sortedList = parseList.sort((a, b) => b.count - a.count)
+      setWinnerList(sortedList.splice(0, 3))
     } catch(error) {
       console.error(error)
     }
@@ -57,7 +69,7 @@ const Complete: FC<CompleteProps> = ({ account }) => {
     checkVoted()
   }, [account, checkVoted])
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     setPage()
   }, [setPage])
 
@@ -65,7 +77,7 @@ const Complete: FC<CompleteProps> = ({ account }) => {
   return (
     <>
     <h1 className="text-white text-lg font-bold py-2 pb-4">Vote the Winner</h1>
-    <WinnerCard />
+    <WinnerCard winnerList={winnerList} />
     <div className="mt-4">
       <Link to={'/'}>
         <button
