@@ -1,6 +1,6 @@
 import React, { FC, useCallback, useEffect, useLayoutEffect, useState } from 'react'
 // import { ethers } from 'ethers'
-// import { Candidate } from '../components/Candidate'
+import { WinnerCard } from '../components/WinnerCard'
 import { votingContract } from '../web3Config'
 
 interface CompleteProps {
@@ -63,7 +63,8 @@ const Complete: FC<CompleteProps> = ({ account }) => {
   // view
   return (
     <>
-      {/* {isVoted === null ? <></> : <div>{ isVoted ? 'true' : 'false' }</div>} */}
+    <h1 className="text-white text-lg font-bold py-2 pb-4">Vote the Winner</h1>
+    <WinnerCard />
     </>
   )
 }

@@ -90,7 +90,7 @@ const Main: FC<MainProps> = ({ account }) => {
   return (
     <>
       <form onSubmit={handleSubmit} className="h-full">
-        <div className="h-full p-4 flex flex-col">
+        <div className="h-full flex flex-col">
           <h1 className="text-white text-lg font-bold py-2 pb-4">
             Vote the Winner
           </h1>
