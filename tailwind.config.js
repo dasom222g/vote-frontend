@@ -3,6 +3,14 @@ module.exports = {
   purge: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
   darkMode: false, // or 'media' or 'class'
   theme: {
+    backgroundSize: {
+      'cover': 'cover',
+      'contain': 'contain',
+      'auto': 'auto',
+      '50%': '50%',
+      '70%': '70%',
+      '80%': '80%',
+    },
     extend: {},
   },
   variants: {
