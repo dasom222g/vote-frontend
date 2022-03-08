@@ -77,16 +77,20 @@ const Complete: FC<CompleteProps> = ({ account }) => {
   return (
     <>
     <h1 className="text-white text-lg font-bold py-2 pb-4">Vote the Winner</h1>
-    <WinnerCard winnerList={winnerList} />
-    <div className="mt-4">
-      <Link to={'/'}>
-        <button
-          className="bg-gradient-to-r from-indigo-500 via-pink-600 to-pink-500 text-slate-100 font-bold text-sm rounded-md w-full py-3 text-white"
-        >
-          Confirm
-        </button>
-      </Link>
-    </div>
+    {isVoted && (
+      <>
+        <WinnerCard winnerList={winnerList} />
+        <div className="mt-4">
+          <Link to={'/'}>
+            <button
+              className="bg-gradient-to-r from-indigo-500 via-pink-600 to-pink-500 text-slate-100 font-bold text-sm rounded-md w-full py-3 text-white"
+            >
+              Confirm
+            </button>
+          </Link>
+        </div>
+      </>
+    )}
     </>
   )
 }

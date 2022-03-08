@@ -28,7 +28,7 @@ export const WinnerCard: FC<WinnerCardProps> = ({ winnerList }) => {
           </div>
           <div className="h-3/5 px-1 py-4 flex items-end justify-center -mx-1">
             {winnerList.map(item => (
-              <div className="px-2 text-center">
+              <div className="px-2 text-center" key={item.id}>
                 <img src={`./images/iu.png`} alt="iu" className="rounded-full w-4/5 mx-auto transform scale-150 origin-bottom" />
                 <span className="block text-xs text-blue-400 mt-2">{item.name}</span>
                 <span className="block text-lg text-white font-bold">{item.count}</span>
