@@ -30,7 +30,7 @@ const Complete: FC<CompleteProps> = ({ account }) => {
   }
 
   const goMain = () => {
-    console.log('투표해주세요!')
+    console.log('Yout shold vote!')
   }
 
   const checkVoted = useCallback(async (): Promise<void> => {
@@ -63,7 +63,7 @@ const Complete: FC<CompleteProps> = ({ account }) => {
   // view
   return (
     <>
-      {isVoted === null ? <></> : <div>{ isVoted ? 'true' : 'false' }</div>}
+      {/* {isVoted === null ? <></> : <div>{ isVoted ? 'true' : 'false' }</div>} */}
     </>
   )
 }
