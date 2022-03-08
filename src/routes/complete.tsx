@@ -1,4 +1,5 @@
 import React, { FC, useCallback, useEffect, useLayoutEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 // import { ethers } from 'ethers'
 import { WinnerCard } from '../components/WinnerCard'
 import { votingContract } from '../web3Config'
@@ -65,6 +66,15 @@ const Complete: FC<CompleteProps> = ({ account }) => {
     <>
     <h1 className="text-white text-lg font-bold py-2 pb-4">Vote the Winner</h1>
     <WinnerCard />
+    <div className="mt-4">
+      <Link to={'/'}>
+        <button
+          className="bg-gradient-to-r from-indigo-500 via-pink-600 to-pink-500 text-slate-100 font-bold text-sm rounded-md w-full py-3 text-white"
+        >
+          Confirm
+        </button>
+      </Link>
+    </div>
     </>
   )
 }
