@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useState } from 'react'
+import React, { FC, useCallback, useEffect, useLayoutEffect, useState } from 'react'
 // import { ethers } from 'ethers'
 // import { Candidate } from '../components/Candidate'
 import { votingContract } from '../web3Config'
@@ -8,7 +8,7 @@ interface CompleteProps {
 }
 
 const Complete: FC<CompleteProps> = ({ account }) => {
-  const [isVoted, setIsVoted] = useState<boolean>(false)
+  const [isVoted, setIsVoted] = useState<boolean | null>(null)
 
 
   // const getRemaingSeconds = async () => {
@@ -29,29 +29,41 @@ const Complete: FC<CompleteProps> = ({ account }) => {
     }
   }
 
+  const goMain = () => {
+    console.log('투표해주세요!')
+  }
+
   const checkVoted = useCallback(async (): Promise<void> => {
     try {
       const result = await votingContract.methods.isVoted(account).call()
       setIsVoted(result)
-      if (isVoted) {
-        getCount()
-        return
-      }
-      console.log('투표해주세요!!')
     } catch(error) {
       console.error(error)
     }
-  }, [account, isVoted])
+  }, [account])
+
+  const setPage = useCallback(async () => {
+    if (isVoted === null) return
+    if (isVoted) {
+      await getCount()
+      return
+    }
+    goMain()
+  }, [isVoted])
 
   useEffect(() => {
     if (!account) return
     checkVoted()
   }, [account, checkVoted])
 
+  useLayoutEffect(() => {
+    setPage()
+  }, [setPage])
+
   // view
   return (
     <>
-      { isVoted }
+      {isVoted === null ? <></> : <div>{ isVoted ? 'true' : 'false' }</div>}
     </>
   )
 }
