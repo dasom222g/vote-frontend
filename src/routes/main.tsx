@@ -51,7 +51,6 @@ const Main: FC<MainProps> = ({ account, isVoted }) => {
           imageName: ethers.utils.parseBytes32String(item.imageName),
         }
       })
-      console.log('candidateList', datas)
       setCandidateList(datas)
     } catch (error) {
       console.error(error)
@@ -76,7 +75,6 @@ const Main: FC<MainProps> = ({ account, isVoted }) => {
   }
 
   const goComplete = (): void => {
-    console.log('goComplete')
     navigate('/complete')
   }
 
@@ -92,7 +90,6 @@ const Main: FC<MainProps> = ({ account, isVoted }) => {
       }
       setIsLoading(true)
       const res = await votingContract.methods.vote(selectedCandidate.id).send({from: account})
-      console.log('res.status', res.status)
       res.status && goComplete()
     } catch(error) {
       console.error(error)
