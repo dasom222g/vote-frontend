@@ -51,6 +51,7 @@ const Main: FC<MainProps> = ({ account, isVoted }) => {
           imageName: ethers.utils.parseBytes32String(item.imageName),
         }
       })
+      console.log('candidateList', datas)
       setCandidateList(datas)
     } catch (error) {
       console.error(error)
@@ -95,8 +96,8 @@ const Main: FC<MainProps> = ({ account, isVoted }) => {
       res.status && goComplete()
     } catch(error) {
       console.error(error)
+      setIsLoading(false)
     }
-    setIsLoading(false)
   }
 
   const getRemaingSeconds = async () => {

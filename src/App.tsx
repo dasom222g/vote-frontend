@@ -28,6 +28,7 @@ const App: FC = () => {
     if (!account) return
     try {
       const result = await votingContract.methods.isVoted(account).call()
+      console.log('result', result)
       setIsVoted(result)
     } catch(error) {
       console.error(error)
