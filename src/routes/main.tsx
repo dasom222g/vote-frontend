@@ -1,5 +1,6 @@
 import { ethers } from 'ethers'
 import React, { FC, useCallback, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Candidate } from '../components/Candidate'
 import { ICandidate } from '../lib/type'
 // import { candidateList as CANDIDATE_LIST_DATA } from '../lib/data'
@@ -7,9 +8,12 @@ import { votingContract } from '../web3Config'
 
 interface MainProps {
   account: string
+  isVoted: boolean | null
 }
 
-const Main: FC<MainProps> = ({ account }) => {
+const Main: FC<MainProps> = ({ account, isVoted }) => {
+  const navigate = useNavigate()
+
   const [isLoading, setIsLoading] = useState<boolean>(false)
   // const [sendDataList, setSendDataList] = useState<ICandidate[]>([])
   const [candidateList, setCandidateList] = useState<ICandidate[]>([])
@@ -39,7 +43,6 @@ const Main: FC<MainProps> = ({ account }) => {
       const data: ICandidate[] = await votingContract.methods
         .getCandidates()
         .call()
-      console.log(data)
       const datas = data.map((item: ICandidate) => {
         return {
           ...item,
@@ -71,11 +74,14 @@ const Main: FC<MainProps> = ({ account }) => {
     setSelectedCandidate(item)
   }
 
+  const goComplete = (): void => {
+    console.log('goComplete')
+    navigate('/complete')
+  }
+
   const handleVote = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault()
-    console.log('handleVote!!')
     if (!account || !selectedCandidate) return
-    setIsLoading(true)
     try {
       if (!isValidVote) {
         // 투표한지 24시간이 지나지 않은 경우
@@ -83,10 +89,10 @@ const Main: FC<MainProps> = ({ account }) => {
         getRemaingSeconds()
         return
       }
-      const res = selectedCandidate && await votingContract.methods.vote(selectedCandidate.id).send({from: account})
-      if (res.status) {
-        // complete 페이지로 이동
-      }
+      setIsLoading(true)
+      const res = await votingContract.methods.vote(selectedCandidate.id).send({from: account})
+      console.log('res.status', res.status)
+      res.status && goComplete()
     } catch(error) {
       console.error(error)
     }
@@ -110,17 +116,13 @@ const Main: FC<MainProps> = ({ account }) => {
     checkValidVote()
   }, [account, checkValidVote])
 
-  useEffect(() => {
-    console.log('isValidVote', isValidVote)
-  }, [isValidVote])
-
   // view
   return (
     <>
       {isLoading && (
         <div className="absolute top-0 bottom-0 left-0 right-0 bg-white bg-opacity-60 z-10 flex items-center justify-center">
           <svg className="animate-spin h-14 w-14 text-indigo-900" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
           </svg>
         </div>
@@ -166,15 +168,28 @@ const Main: FC<MainProps> = ({ account }) => {
               get Candidate
             </button>
           </div> */}
-          <div className="mt-4">
+          {(!isVoted || isValidVote) && (
+            <div className="mt-4">
+              <button
+                type="submit"
+                disabled={!isValidVote || !selectedCandidate}
+                className={`bg-gradient-to-r from-indigo-500 via-pink-600 to-pink-500 text-slate-100 font-bold text-sm rounded-md w-full py-3 text-white ${!isValidVote || !selectedCandidate ? 'cursor-not-allowed opacity-60' : ''}`}
+              >
+                Vote
+              </button>
+            </div>
+          )}
+          {isVoted && (
+            <div className="mt-4">
             <button
-              type="submit"
-              disabled={!isValidVote && !selectedCandidate}
-              className={`bg-gradient-to-r from-indigo-500 via-pink-600 to-pink-500 text-slate-100 font-bold text-sm rounded-md w-full py-3 text-white ${!isValidVote || !selectedCandidate ? 'cursor-not-allowed opacity-60' : ''}`}
+              type="button"
+              className={`bg-gradient-to-r from-indigo-500 via-pink-600 to-pink-500 text-slate-100 font-bold text-sm rounded-md w-full py-3 text-white`}
+              onClick={goComplete}
             >
-              Vote
+              Go to check
             </button>
           </div>
+          )}
         </div>
       </form>
     </>

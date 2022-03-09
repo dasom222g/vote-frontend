@@ -18,7 +18,8 @@ export interface ICandidateNoId {
 }
 
 export interface ICountItem {
-  id: number,
-  name: string,
+  id: number
+  name: string
+  imageName?: string
   count: number
 }
