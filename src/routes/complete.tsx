@@ -49,6 +49,7 @@ const Complete: FC<CompleteProps> = ({ account }) => {
   const checkVoted = useCallback(async (): Promise<void> => {
     try {
       const result = await votingContract.methods.isVoted(account).call()
+      console.log('isVoted', result)
       setIsVoted(result)
     } catch(error) {
       console.error(error)

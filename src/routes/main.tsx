@@ -1,5 +1,5 @@
 import { ethers } from 'ethers'
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useCallback, useEffect, useState } from 'react'
 import { Candidate } from '../components/Candidate'
 import { ICandidate } from '../lib/type'
 // import { candidateList as CANDIDATE_LIST_DATA } from '../lib/data'
@@ -10,9 +10,11 @@ interface MainProps {
 }
 
 const Main: FC<MainProps> = ({ account }) => {
+  const [isLoading, setIsLoading] = useState<boolean>(false)
   // const [sendDataList, setSendDataList] = useState<ICandidate[]>([])
   const [candidateList, setCandidateList] = useState<ICandidate[]>([])
   const [selectedCandidate, setSelectedCandidate] = useState<ICandidate | null>(null)
+  const [isValidVote, setIsValidVote] = useState<boolean>(false)
 
   
 
@@ -32,6 +34,7 @@ const Main: FC<MainProps> = ({ account }) => {
   // }
 
   const getCandidateList = async () => {
+    setIsLoading(true)
     try {
       const data: ICandidate[] = await votingContract.methods
         .getCandidates()
@@ -49,28 +52,45 @@ const Main: FC<MainProps> = ({ account }) => {
     } catch (error) {
       console.error(error)
     }
+    setIsLoading(false)
   }
 
+  const checkValidVote = useCallback(async () => {
+    if (!account) return
+    setIsLoading(true)
+    try {
+      let isValid = await votingContract.methods.isValidVotingTime(account).call()
+      setIsValidVote(isValid)
+    } catch(error) {
+      setIsValidVote(false)
+    }
+    setIsLoading(false)
+  }, [account])
+
   const selectCandidate = (id: number, item: ICandidate) => {
-    console.log('onchange')
     setSelectedCandidate(item)
   }
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
+  const handleVote = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault()
-    if (!account) return
+    console.log('handleVote!!')
+    if (!account || !selectedCandidate) return
+    setIsLoading(true)
     try {
-      const isValid = await votingContract.methods.isValidVotingTime(account).call()
-      if (!isValid) {
+      if (!isValidVote) {
+        // 투표한지 24시간이 지나지 않은 경우
         console.log(`can't vote`)
         getRemaingSeconds()
         return
       }
       const res = selectedCandidate && await votingContract.methods.vote(selectedCandidate.id).send({from: account})
-      console.log(res.status)
+      if (res.status) {
+        // complete 페이지로 이동
+      }
     } catch(error) {
       console.error(error)
     }
+    setIsLoading(false)
   }
 
   const getRemaingSeconds = async () => {
@@ -86,10 +106,26 @@ const Main: FC<MainProps> = ({ account }) => {
     getCandidateList()
   }, [])
 
+  useEffect(() => {
+    checkValidVote()
+  }, [account, checkValidVote])
+
+  useEffect(() => {
+    console.log('isValidVote', isValidVote)
+  }, [isValidVote])
+
   // view
   return (
     <>
-      <form onSubmit={handleSubmit} className="h-full">
+      {isLoading && (
+        <div className="absolute top-0 bottom-0 left-0 right-0 bg-white bg-opacity-60 z-10 flex items-center justify-center">
+          <svg className="animate-spin h-14 w-14 text-indigo-900" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+        </div>
+      )}
+      <form onSubmit={handleVote} className="h-full">
         <div className="h-full flex flex-col">
           <h1 className="text-white text-lg font-bold py-2 pb-4">
             Vote the Winner
@@ -133,7 +169,8 @@ const Main: FC<MainProps> = ({ account }) => {
           <div className="mt-4">
             <button
               type="submit"
-              className="bg-gradient-to-r from-indigo-500 via-pink-600 to-pink-500 text-slate-100 font-bold text-sm rounded-md w-full py-3 text-white"
+              disabled={!isValidVote && !selectedCandidate}
+              className={`bg-gradient-to-r from-indigo-500 via-pink-600 to-pink-500 text-slate-100 font-bold text-sm rounded-md w-full py-3 text-white ${!isValidVote || !selectedCandidate ? 'cursor-not-allowed opacity-60' : ''}`}
             >
               Vote
             </button>
