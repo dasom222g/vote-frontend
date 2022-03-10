@@ -6,12 +6,12 @@ import { ICandidate } from '../lib/type'
 // import { candidateList as CANDIDATE_LIST_DATA } from '../lib/data'
 import { votingContract } from '../web3Config'
 
-interface MainProps {
+interface VoteProps {
   account: string
   isVoted: boolean | null
 }
 
-const Main: FC<MainProps> = ({ account, isVoted }) => {
+const Vote: FC<VoteProps> = ({ account, isVoted }) => {
   const navigate = useNavigate()
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -179,14 +179,14 @@ const Main: FC<MainProps> = ({ account, isVoted }) => {
           )}
           {isVoted && (
             <div className="mt-4">
-            <button
-              type="button"
-              className={`bg-gradient-to-r from-indigo-500 via-pink-600 to-pink-500 text-slate-100 font-bold text-sm rounded-md w-full py-3 text-white`}
-              onClick={goComplete}
-            >
-              Go to check
-            </button>
-          </div>
+              <button
+                type="button"
+                className={`bg-gradient-to-r from-indigo-500 via-pink-600 to-pink-500 text-slate-100 font-bold text-sm rounded-md w-full py-3 text-white`}
+                onClick={goComplete}
+              >
+                Go to check
+              </button>
+            </div>
           )}
         </div>
       </form>
@@ -194,4 +194,4 @@ const Main: FC<MainProps> = ({ account, isVoted }) => {
   )
 }
 
-export default Main
+export default Vote
