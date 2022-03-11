@@ -3,7 +3,6 @@ import React, { FC } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import WalletWeb3React from './routes/wallet-web3-react';
 // import { votingContract } from './web3Config'
-import WalletConnet from './routes/wallet_connect';
 // import Complete from './routes/complete'
 // import Vote from './routes/vote';
 
@@ -33,8 +32,8 @@ const App: FC = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<WalletConnet />} />
-        <Route path="/wallet" element={<WalletWeb3React />} />
+        <Route path="/" element={<WalletWeb3React />} />
+        {/* <Route path="/vanilaWallet" element={<WalletConnetVanila />} /> */}
         {/* <Route path="/vote" element={<Vote account={account} isVoted={isVoted} />} />
         <Route path="/complete" element={<Complete account={account} isVoted={isVoted} />} /> */}
       </Routes>

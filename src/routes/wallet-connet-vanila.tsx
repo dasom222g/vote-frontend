@@ -8,10 +8,10 @@ declare global {
   }
 }
 
-interface WalletConnetProps {
+interface WalletConnetVanilaProps {
 }
 
-const WalletConnet: FC<WalletConnetProps> = () => {
+const WalletConnetVanila: FC<WalletConnetVanilaProps> = () => {
   const [errorMessage, setErrorMessage] = useState<string>('')
   const [account, setAccount] = useState<string>('')
   const [balance, setBalance] = useState<string>('')
@@ -86,4 +86,4 @@ const WalletConnet: FC<WalletConnetProps> = () => {
   )
 }
 
-export default WalletConnet
+export default WalletConnetVanila
