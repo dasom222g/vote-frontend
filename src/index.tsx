@@ -1,21 +1,26 @@
-import { ExternalProvider, JsonRpcFetchFunc, Web3Provider } from '@ethersproject/providers'
-import { Web3ReactProvider } from '@web3-react/core'
+import { Arbitrum, Config, DAppProvider, Kovan, Mainnet, Ropsten } from '@usedapp/core'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import 'tailwindcss/tailwind.css'
 import App from './App'
 import reportWebVitals from './reportWebVitals'
 
-const getLibrary = (provider: ExternalProvider | JsonRpcFetchFunc) => {
-  const library = new Web3Provider(provider, 'any')
-  return library
+const config: Config = {
+  readOnlyChainId: Mainnet.chainId,
+  readOnlyUrls: {
+    [Mainnet.chainId]: 'https://mainnet.infura.io/v3/57fc2c19095745e59ab96a4aa87dada8',
+    [Ropsten.chainId]: 'https://ropsten.infura.io/v3/57fc2c19095745e59ab96a4aa87dada8',
+    [Kovan.chainId]: 'https://kovan.infura.io/v3/57fc2c19095745e59ab96a4aa87dada8',
+    [Arbitrum.chainId]: 'https://arb1.arbitrum.io/rpc',
+  },
+  multicallVersion: 2 as const,
 }
 
 ReactDOM.render(
   <React.StrictMode>
-    <Web3ReactProvider getLibrary={getLibrary}>
+    <DAppProvider config={config}>
       <App />
-    </Web3ReactProvider>
+    </DAppProvider>
   </React.StrictMode>,
   document.getElementById('root')
 )
