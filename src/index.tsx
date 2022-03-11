@@ -1,12 +1,21 @@
+import { ExternalProvider, JsonRpcFetchFunc, Web3Provider } from '@ethersproject/providers'
+import { Web3ReactProvider } from '@web3-react/core'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import 'tailwindcss/tailwind.css'
 import App from './App'
 import reportWebVitals from './reportWebVitals'
 
+const getLibrary = (provider: ExternalProvider | JsonRpcFetchFunc) => {
+  const library = new Web3Provider(provider, 'any')
+  return library
+}
+
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Web3ReactProvider getLibrary={getLibrary}>
+      <App />
+    </Web3ReactProvider>
   </React.StrictMode>,
   document.getElementById('root')
 )
