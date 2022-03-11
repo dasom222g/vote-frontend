@@ -5,12 +5,12 @@ import 'tailwindcss/tailwind.css'
 import App from './App'
 import reportWebVitals from './reportWebVitals'
 
-const appId = 'P2qbmbZ0vnsYI9ipGvZhK510VJs8UVZyh7wSHJKp'
-const serverUrl = 'https://xowcffi7vsce.usemoralis.com:2053/server'
+const MORALIS_APPLICATION_ID = process.env.REACT_APP_MORALIS_APPLICATION_ID! 
+const MORALIS_SERVER_URL = process.env.REACT_APP_MORALIS_SERVER_URL!
 
 ReactDOM.render(
   <React.StrictMode>
-    <MoralisProvider appId={appId} serverUrl={serverUrl}>
+    <MoralisProvider appId={MORALIS_APPLICATION_ID} serverUrl={MORALIS_SERVER_URL}>
       <App />
     </MoralisProvider>
   </React.StrictMode>,

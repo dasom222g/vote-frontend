@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect } from 'react'
 import { useMoralis } from 'react-moralis'
 
 declare global {
@@ -10,18 +10,20 @@ declare global {
 interface WalletWeb3ReactProps {}
 
 const WalletWeb3React: FC<WalletWeb3ReactProps> = () => {
-  const { authenticate, isAuthenticated } = useMoralis()
-  const [account, setAccount] = useState<string>('')
-
+  const { authenticate, isAuthenticated, user, logout, isAuthenticating } = useMoralis()
   const login = async () => {
     await authenticate({signingMessage: "Welcome my Voting app" })
           .then(function (user) {
-            user && setAccount(user.get('ethAddress'))
+            console.log(user)
           })
           .catch(function (error) {
             console.log(error);
           });
   }
+
+  useEffect(() => {
+    console.log('isAuthenticating', isAuthenticating)    
+  }, [isAuthenticating])
 
   // view
   return (
@@ -41,7 +43,17 @@ const WalletWeb3React: FC<WalletWeb3ReactProps> = () => {
         </>
       ) : (
         <>
-          <h1>Account: {account}</h1>
+          <h1>Account: {user && user.get('ethAddress')}</h1>
+          <div className="mt-2">
+            <button
+              type="button"
+              className={`bg-gradient-to-r from-indigo-500 via-pink-600 to-pink-500 text-slate-100 font-bold text-sm rounded-md w-full py-3 text-white`}
+              disabled={isAuthenticating}
+              onClick={() => logout()}
+            >
+              Disconnect
+            </button>
+          </div>
         </>
       )}
     </>

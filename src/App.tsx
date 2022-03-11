@@ -12,24 +12,8 @@ import WalletConnet from './routes/wallet_connect';
 // 3. 투표를 했고 24시간 지난 경우 - vote, complete페이지 접근 가능
 
 const App: FC = () => {
-  // const [account, setAccount] = useState<string>('')
   // const [isVoted, setIsVoted] = useState<boolean | null>(null)
 
-  // const getAccount = async () => {
-  //   try {
-  //     if (window.ethereum) { // metamask설치되어 있는경우
-  //       // 브라우저에서 metamask 연결 요청하여 account배열 get
-  //       const accounts: string[] = await window.ethereum.request({
-  //         method: 'eth_requestAccounts'
-  //       })
-  //       setAccount(accounts[0])
-  //       return
-  //     }
-  //     alert('Install Meta Mask!') // metamask 설치되지 않은 경우
-  //   } catch (error) {
-  //     console.error(error)
-  //   }
-  // }
 
   // const checkVoted = useCallback(async (): Promise<void> => {
   //   if (!account) return
