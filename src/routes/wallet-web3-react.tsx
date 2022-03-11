@@ -3,10 +3,10 @@ import { useChain, useMoralis } from 'react-moralis'
 
 const WalletConnect: FC = () => {
   const CONNECT_MESSAGE = 'Your account will be linked to this address.'
-  const STORAGE_KEY = `Parse/${process.env.REACT_APP_MORALIS_APPLICATION_ID}/currentUser`
+  // const STORAGE_KEY = `Parse/${process.env.REACT_APP_MORALIS_APPLICATION_ID}/currentUser`
 
-  const { chain, account } = useChain();
-  const { authenticate, logout, isAuthenticated, isAuthenticating } = useMoralis()
+  const { switchNetwork, chain, account } = useChain();
+  const { authenticate, logout, isAuthenticated, isAuthenticating, user } = useMoralis()
 
   const login = async () => {
     try {
@@ -22,9 +22,8 @@ const WalletConnect: FC = () => {
 
   const handleChangeAccount = useCallback(() => {
     console.log('account', account)
-    if (account !== null) return
-    localStorage.getItem(STORAGE_KEY) && localStorage.removeItem(STORAGE_KEY)
-  }, [STORAGE_KEY, account])
+    if (account) return
+  }, [account])
 
   useEffect(() => {
     handleChageChain()
@@ -42,7 +41,7 @@ const WalletConnect: FC = () => {
           </svg>
         </div>
       )}
-      {!isAuthenticated || !account ? (
+      {!isAuthenticated ? (
         <>
           <div>
             <button
@@ -57,7 +56,7 @@ const WalletConnect: FC = () => {
       ) : (
         <>
           {/* <p className="text-sm">Account: {user && user.get('ethAddress')}</p> */}
-          <p className="text-sm">Account: {account}</p>
+          <p className="text-sm">Account: {user!.get('ethAddress') || account}</p>
           <div className="mt-2">
             <button
               type="button"
@@ -66,6 +65,16 @@ const WalletConnect: FC = () => {
               onClick={() => logout()}
             >
               Disconnect
+            </button>
+          </div>
+          <div className="mt-2">
+            <button
+              type="button"
+              className={`bg-gradient-to-r from-indigo-500 via-pink-600 to-pink-500 text-slate-100 font-bold text-sm rounded-md w-full py-3 text-white`}
+              disabled={isAuthenticating}
+              onClick={() => switchNetwork("0x1")}
+            >
+              Change to Ethereum Mainnet
             </button>
           </div>
         </>
