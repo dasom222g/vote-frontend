@@ -137,7 +137,6 @@ const Vote: FC = () => {
           </svg>
         </div>
       )}
-      <div className="text-sm">{ account }</div>
       <form onSubmit={handleVote} className="h-full">
         <div className="h-full flex flex-col">
           <h1 className="text-white text-lg font-bold py-2 pb-4">

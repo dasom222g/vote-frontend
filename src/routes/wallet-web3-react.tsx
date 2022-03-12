@@ -5,8 +5,8 @@ const WalletConnect: FC = () => {
   const CONNECT_MESSAGE = 'Your account will be linked to this address.'
   // const STORAGE_KEY = `Parse/${process.env.REACT_APP_MORALIS_APPLICATION_ID}/currentUser`
 
-  const { switchNetwork, chain, account } = useChain()
-  const { authenticate, logout, isAuthenticated, isAuthenticating, user } = useMoralis()
+  const { chain, account } = useChain()
+  const { authenticate, isAuthenticated, isAuthenticating } = useMoralis()
 
   console.log('account!!!', account)
 
@@ -43,8 +43,12 @@ const WalletConnect: FC = () => {
           </svg>
         </div>
       )}
-      {!isAuthenticated ? (
-        <>
+      {!isAuthenticated && (
+        <div className="h-full flex flex-col flex-auto justify-between">
+          <div className="text-white text-center">
+            <h2 className="text-lg font-bold py-2">Connect with wallet</h2>
+            <p>Connect with one of our available wallet providers.</p>
+          </div>
           <div>
             <button
               type="button"
@@ -54,33 +58,33 @@ const WalletConnect: FC = () => {
               Connect
             </button>
           </div>
-        </>
-      ) : (
-        <>
-          {/* <p className="text-sm">Account: {user && user.get('ethAddress')}</p> */}
-          <p className="text-sm">Account: {account || user!.get('ethAddress')}</p>
-          <div className="mt-2">
-            <button
-              type="button"
-              className={`bg-gradient-to-r from-indigo-500 via-pink-600 to-pink-500 text-slate-100 font-bold text-sm rounded-md w-full py-3 text-white`}
-              disabled={isAuthenticating}
-              onClick={() => logout()}
-            >
-              Disconnect
-            </button>
-          </div>
-          <div className="mt-2">
-            <button
-              type="button"
-              className={`bg-gradient-to-r from-indigo-500 via-pink-600 to-pink-500 text-slate-100 font-bold text-sm rounded-md w-full py-3 text-white`}
-              disabled={isAuthenticating}
-              onClick={() => switchNetwork("0x1")}
-            >
-              Change to Ethereum Mainnet
-            </button>
-          </div>
-        </>
-      )}
+        </div>
+      )
+        // <>
+        //   {/* <p className="text-sm">Account: {user && user.get('ethAddress')}</p> */}
+        //   <p className="text-sm">Account: {account || user!.get('ethAddress')}</p>
+        //   <div className="mt-2">
+        //     <button
+        //       type="button"
+        //       className={`bg-gradient-to-r from-indigo-500 via-pink-600 to-pink-500 text-slate-100 font-bold text-sm rounded-md w-full py-3 text-white`}
+        //       disabled={isAuthenticating}
+        //       onClick={() => logout()}
+        //     >
+        //       Disconnect
+        //     </button>
+        //   </div>
+        //   <div className="mt-2">
+        //     <button
+        //       type="button"
+        //       className={`bg-gradient-to-r from-indigo-500 via-pink-600 to-pink-500 text-slate-100 font-bold text-sm rounded-md w-full py-3 text-white`}
+        //       disabled={isAuthenticating}
+        //       onClick={() => switchNetwork("0x1")}
+        //     >
+        //       Change to Ethereum Mainnet
+        //     </button>
+        //   </div>
+        // </>
+      }
     </>
   )
 }

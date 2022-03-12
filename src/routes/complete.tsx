@@ -2,6 +2,7 @@ import { ethers } from 'ethers'
 import React, { FC, useCallback, useEffect, useState } from 'react'
 import { useMoralis } from 'react-moralis'
 import { Link, useNavigate } from 'react-router-dom'
+import { FireCracker } from '../components/FireCracker'
 // import { ethers } from 'ethers'
 import { WinnerCard } from '../components/WinnerCard'
 import { ICandidate, ICountItem } from '../lib/type'
@@ -119,6 +120,7 @@ const Complete: FC = () => {
     <h1 className="text-white text-lg font-bold py-2 pb-4">Vote the Winner</h1>
     {isVoted && (
       <>
+        <FireCracker />
         <WinnerCard winnerList={winnerList} />
         <div className="mt-4">
           <Link to={'/vote'}>
