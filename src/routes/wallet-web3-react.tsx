@@ -5,7 +5,7 @@ const WalletConnect: FC = () => {
   const CONNECT_MESSAGE = 'Your account will be linked to this address.'
   // const STORAGE_KEY = `Parse/${process.env.REACT_APP_MORALIS_APPLICATION_ID}/currentUser`
 
-  const { switchNetwork, chain, account } = useChain();
+  const { switchNetwork, chain, account } = useChain()
   const { authenticate, logout, isAuthenticated, isAuthenticating, user } = useMoralis()
 
   const login = async () => {
