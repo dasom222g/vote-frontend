@@ -80,7 +80,6 @@ const Complete: FC = () => {
 
       const sortedList = parseList.sort((a, b) => b.count - a.count)
       const top3List = sortedList.splice(0, 3)
-      // const filterList = candidates.filter(candidate => top3List.map(top => top.id).includes(Number(candidate.id)))
       setWinnerList(top3List)
     } catch(error) {
       console.error(error)

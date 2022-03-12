@@ -63,7 +63,7 @@ export const FireCracker: FC<FireCrackerProps> = ({isLoading}) => {
   }, [makeShot])
 
   useEffect(() => {
-    isLoading && setTimeout(() => { fire() }, 500)
+    typeof isLoading === 'boolean' && !isLoading && setTimeout(() => { fire() }, 500)
   }, [isLoading, fire])
 
   // view
