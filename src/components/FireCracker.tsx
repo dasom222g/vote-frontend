@@ -8,13 +8,15 @@ const canvasStyles = {
   width: '100%',
   height: '100%',
   top: 0,
-  left: 0
+  left: 0,
+  zIndex: 10
 } as React.CSSProperties
 
-// const trophyStyle = { backgroundImage: 'url(/images/trophy.png)'}
+interface FireCrackerProps {
+  isLoading: boolean
+}
 
-
-export const FireCracker: FC= () => {
+export const FireCracker: FC<FireCrackerProps> = ({isLoading}) => {
   const refAnimationInstance = useRef<CreateTypes | null>(null)
 
   const getInstance = useCallback(instance => {
@@ -61,8 +63,8 @@ export const FireCracker: FC= () => {
   }, [makeShot])
 
   useEffect(() => {
-    fire()
-  }, [fire])
+    isLoading && fire()
+  }, [isLoading, fire])
 
   // view
   return (
