@@ -1,10 +1,12 @@
 import React, { FC, useCallback, useEffect } from 'react'
 import { useChain, useMoralis } from 'react-moralis'
+import { useNavigate } from 'react-router-dom'
 
 const WalletConnect: FC = () => {
   const CONNECT_MESSAGE = 'Your account will be linked to this address.'
   // const STORAGE_KEY = `Parse/${process.env.REACT_APP_MORALIS_APPLICATION_ID}/currentUser`
-
+  const navigate = useNavigate()
+  
   const { chain, account } = useChain()
   const { authenticate, isAuthenticated, isAuthenticating } = useMoralis()
 
@@ -26,11 +28,15 @@ const WalletConnect: FC = () => {
     console.log('account', account)
   }, [account])
 
+  const goVote = useCallback(() => {
+    navigate('/vote')
+  }, [navigate])
+
   useEffect(() => {
     handleChageChain()
     handleChangeAccount()
-    console.log('isAuthenticated', isAuthenticated)
-  }, [handleChageChain, chain, handleChangeAccount, account, isAuthenticated])
+    isAuthenticated && goVote()
+  }, [chain, account, isAuthenticated, handleChageChain, handleChangeAccount, goVote])
 
   // view
   return (
