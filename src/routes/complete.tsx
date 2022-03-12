@@ -13,7 +13,7 @@ const Complete: FC = () => {
 
   const { user } = useMoralis()
   const [isVoted, setIsVoted] = useState<boolean | null>(null)
-  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean | null>(null)
   const [winnerList, setWinnerList] = useState<ICountItem[]>([])
 
   const checkVoted = useCallback(async (): Promise<void> => {
