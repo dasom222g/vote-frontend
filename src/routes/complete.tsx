@@ -1,21 +1,35 @@
 import { ethers } from 'ethers'
 import React, { FC, useCallback, useEffect, useState } from 'react'
+import { useMoralis } from 'react-moralis'
 import { Link, useNavigate } from 'react-router-dom'
 // import { ethers } from 'ethers'
 import { WinnerCard } from '../components/WinnerCard'
 import { ICandidate, ICountItem } from '../lib/type'
 import { votingContract } from '../web3Config'
 
-interface CompleteProps {
-  account: string
-  isVoted: boolean | null
-}
-
-const Complete: FC<CompleteProps> = ({ isVoted }) => {
+const Complete: FC = () => {
   const navigate = useNavigate()
-  
+
+  const { user } = useMoralis()
+  const [isVoted, setIsVoted] = useState<boolean | null>(null)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [winnerList, setWinnerList] = useState<ICountItem[]>([])
+
+  const checkVoted = useCallback(async (): Promise<void> => {
+    if (!user) return
+    const account = user.get('ethAddress')
+    console.log('complete', account)
+    try {
+      const result = await votingContract.methods.isVoted(account).call()
+      setIsVoted(result)
+    } catch(error) {
+      console.error(error)
+    }
+  }, [user])
+
+  useEffect(() => {
+    checkVoted()
+  }, [checkVoted])
 
 
   // const getRemaingSeconds = async () => {
@@ -73,8 +87,8 @@ const Complete: FC<CompleteProps> = ({ isVoted }) => {
     setIsLoading(false)
   }, [getCandidateList])
 
-  const goMain = useCallback(() => {
-    navigate('/')
+  const goVote = useCallback(() => {
+    navigate('/vote')
   }, [navigate])
 
   const setPage = useCallback(async () => {
@@ -84,8 +98,8 @@ const Complete: FC<CompleteProps> = ({ isVoted }) => {
       return
     }
     // todo: You should vote and check alert 창 띄우기
-    goMain()
-  }, [isVoted, goMain, getCount])
+    goVote()
+  }, [isVoted, goVote, getCount])
 
   useEffect(() => {
     setPage()
@@ -107,8 +121,9 @@ const Complete: FC<CompleteProps> = ({ isVoted }) => {
       <>
         <WinnerCard winnerList={winnerList} />
         <div className="mt-4">
-          <Link to={'/'}>
+          <Link to={'/vote'}>
             <button
+              type="button"
               className="bg-gradient-to-r from-indigo-500 via-pink-600 to-pink-500 text-slate-100 font-bold text-sm rounded-md w-full py-3 text-white"
             >
               Confirm

@@ -8,6 +8,8 @@ const WalletConnect: FC = () => {
   const { switchNetwork, chain, account } = useChain()
   const { authenticate, logout, isAuthenticated, isAuthenticating, user } = useMoralis()
 
+  console.log('account!!!', account)
+
   const login = async () => {
     try {
       await authenticate({signingMessage: CONNECT_MESSAGE })
@@ -22,18 +24,18 @@ const WalletConnect: FC = () => {
 
   const handleChangeAccount = useCallback(() => {
     console.log('account', account)
-    if (account) return
   }, [account])
 
   useEffect(() => {
     handleChageChain()
     handleChangeAccount()
-  }, [handleChageChain, chain, handleChangeAccount, account])
+    console.log('isAuthenticated', isAuthenticated)
+  }, [handleChageChain, chain, handleChangeAccount, account, isAuthenticated])
 
   // view
   return (
     <>
-      {isAuthenticating && (
+      {isAuthenticating  && (
         <div className="absolute top-0 bottom-0 left-0 right-0 bg-white bg-opacity-60 z-10 flex items-center justify-center">
           <svg className="animate-spin h-14 w-14 text-indigo-900" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
@@ -56,7 +58,7 @@ const WalletConnect: FC = () => {
       ) : (
         <>
           {/* <p className="text-sm">Account: {user && user.get('ethAddress')}</p> */}
-          <p className="text-sm">Account: {user!.get('ethAddress') || account}</p>
+          <p className="text-sm">Account: {account || user!.get('ethAddress')}</p>
           <div className="mt-2">
             <button
               type="button"

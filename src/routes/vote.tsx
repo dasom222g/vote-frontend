@@ -1,18 +1,17 @@
 import { ethers } from 'ethers'
 import React, { FC, useCallback, useEffect, useState } from 'react'
+import { useMoralis } from 'react-moralis'
 import { useNavigate } from 'react-router-dom'
 import { Candidate } from '../components/Candidate'
 import { ICandidate } from '../lib/type'
 // import { candidateList as CANDIDATE_LIST_DATA } from '../lib/data'
 import { votingContract } from '../web3Config'
 
-interface VoteProps {
-  account: string
-  isVoted: boolean | null
-}
-
-const Vote: FC<VoteProps> = ({ account, isVoted }) => {
+const Vote: FC = () => {
   const navigate = useNavigate()
+  const [isVoted, setIsVoted] = useState<boolean | null>(null)
+  const [account, setAccount] = useState<string>('')
+  const { user } = useMoralis()
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
   // const [sendDataList, setSendDataList] = useState<ICandidate[]>([])
@@ -57,6 +56,16 @@ const Vote: FC<VoteProps> = ({ account, isVoted }) => {
     }
     setIsLoading(false)
   }
+
+  const checkVoted = useCallback(async (): Promise<void> => {
+    if (!account) return
+    try {
+      const result = await votingContract.methods.isVoted(account).call()
+      setIsVoted(result)
+    } catch(error) {
+      console.error(error)
+    }
+  }, [account])
 
   const checkValidVote = useCallback(async () => {
     if (!account) return
@@ -107,12 +116,15 @@ const Vote: FC<VoteProps> = ({ account, isVoted }) => {
   }
 
   useEffect(() => {
+    checkVoted()
+    checkValidVote()
     getCandidateList()
-  }, [])
+  }, [checkVoted, checkValidVote])
 
   useEffect(() => {
-    checkValidVote()
-  }, [account, checkValidVote])
+    user && setAccount(user.get('ethAddress'))
+  }, [user])
+
 
   // view
   return (
@@ -125,6 +137,7 @@ const Vote: FC<VoteProps> = ({ account, isVoted }) => {
           </svg>
         </div>
       )}
+      <div className="text-sm">{ account }</div>
       <form onSubmit={handleVote} className="h-full">
         <div className="h-full flex flex-col">
           <h1 className="text-white text-lg font-bold py-2 pb-4">
