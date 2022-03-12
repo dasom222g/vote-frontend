@@ -36,29 +36,34 @@ export const FireCracker: FC<FireCrackerProps> = ({isLoading}) => {
   const fire = useCallback(() => {
     makeShot(0.25, {
       spread: 46,
-      startVelocity: 55
+      startVelocity: 55,
+      shapes: ['circle'],
     })
 
     makeShot(0.2, {
-      spread: 80
+      spread: 80,
+      shapes: ['circle'],
     })
 
     makeShot(0.35, {
       spread: 120,
       decay: 0.91,
-      scalar: 0.8
+      scalar: 0.8,
+      shapes: ['circle'],
     })
 
     makeShot(0.1, {
       spread: 140,
       startVelocity: 25,
       decay: 0.92,
-      scalar: 1.2
+      scalar: 1.2,
+      shapes: ['circle'],
     })
 
     makeShot(0.1, {
       spread: 140,
-      startVelocity: 45
+      startVelocity: 45,
+      shapes: ['circle'],
     })
   }, [makeShot])
 
