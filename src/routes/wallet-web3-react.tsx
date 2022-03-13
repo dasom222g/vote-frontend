@@ -127,7 +127,7 @@ const WalletConnect: FC = () => {
                 Connect Metamask
               </button>
             </div>
-            <div className="mt-auto">
+            <div className="mt-2">
               <button
                 type="button"
                 className={`bg-gradient-to-r from-indigo-500 via-pink-600 to-pink-500 text-slate-100 font-bold text-sm rounded-md w-full py-3 text-white`}
