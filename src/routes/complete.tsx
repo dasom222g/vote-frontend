@@ -1,7 +1,7 @@
 import { ethers } from 'ethers'
 import React, { FC, useCallback, useEffect, useState } from 'react'
 import { useMoralis } from 'react-moralis'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { FireCracker } from '../components/FireCracker'
 // import { ethers } from 'ethers'
 import { WinnerCard } from '../components/WinnerCard'
@@ -10,6 +10,7 @@ import { votingContract } from '../web3Config'
 
 const Complete: FC = () => {
   const navigate = useNavigate()
+  const { pathname: path } = useLocation()
 
   const { user } = useMoralis()
   const [isVoted, setIsVoted] = useState<boolean | null>(null)
@@ -120,7 +121,7 @@ const Complete: FC = () => {
     {isVoted && (
       <>
         <FireCracker isLoading={isLoading} />
-        <WinnerCard winnerList={winnerList} />
+        <WinnerCard winnerList={winnerList} path={path} />
         <div className="mt-4">
           <Link to={'/vote'}>
             <button

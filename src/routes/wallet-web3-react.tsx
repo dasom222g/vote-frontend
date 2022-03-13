@@ -1,16 +1,18 @@
-import React, { FC, useCallback, useEffect } from 'react'
+import React, { FC, useCallback, useEffect, useState } from 'react'
 import { useChain, useMoralis } from 'react-moralis'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { WinnerCard } from '../components/WinnerCard'
+import { ICountItem } from '../lib/type'
 
 const WalletConnect: FC = () => {
   const CONNECT_MESSAGE = 'Your account will be linked to this address.'
-  // const STORAGE_KEY = `Parse/${process.env.REACT_APP_MORALIS_APPLICATION_ID}/currentUser`
   const navigate = useNavigate()
+  const { pathname: path } = useLocation()
   
   const { chain, account } = useChain()
   const { authenticate, isAuthenticated, isAuthenticating } = useMoralis()
+  const [winnerList, setWinnerList] = useState<ICountItem[]>([])
 
-  console.log('account!!!', account)
 
   const login = async () => {
     try {
@@ -38,6 +40,20 @@ const WalletConnect: FC = () => {
     isAuthenticated && goVote()
   }, [chain, account, isAuthenticated, handleChageChain, handleChangeAccount, goVote])
 
+  useEffect(() => {
+    let winnerList: ICountItem[] = []
+    for (let i = 0; i < 3; i++) {
+      const anonymousWinner:ICountItem = {
+        id: i + 1,
+        name: '???',
+        imageName: 'silhouette.png',
+        count: 0
+      }
+      winnerList = [...winnerList, anonymousWinner]
+    }
+    setWinnerList(winnerList)
+  }, [])
+
   // view
   return (
     <>
@@ -50,12 +66,13 @@ const WalletConnect: FC = () => {
         </div>
       )}
       {!isAuthenticated && (
-        <div className="h-full flex flex-col flex-auto justify-between">
+        <div className="h-full flex flex-col flex-auto">
           <div className="text-white text-center">
-            <h2 className="text-lg font-bold py-2">Connect with wallet</h2>
-            <p>Connect with one of our available wallet providers.</p>
+            <h2 className="text-lg font-bold py-2">Please vote after Connect with wallet</h2>
+            <p>Connect with one of our available wallet providers and Vote to your singer.</p>
           </div>
-          <div>
+          <WinnerCard winnerList={winnerList} path={path} />
+          <div className="mt-auto">
             <button
               type="button"
               className={`bg-gradient-to-r from-indigo-500 via-pink-600 to-pink-500 text-slate-100 font-bold text-sm rounded-md w-full py-3 text-white`}
