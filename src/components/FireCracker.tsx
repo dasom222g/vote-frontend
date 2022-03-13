@@ -37,19 +37,19 @@ export const FireCracker: FC<FireCrackerProps> = ({isLoading}) => {
     makeShot(0.25, {
       spread: 46,
       startVelocity: 55,
-      shapes: ['circle'],
+      shapes: ['circle', 'square', 'square'],
     })
 
     makeShot(0.2, {
       spread: 80,
-      shapes: ['circle'],
+      shapes: ['circle', 'square', 'square'],
     })
 
     makeShot(0.35, {
       spread: 120,
       decay: 0.91,
       scalar: 0.8,
-      shapes: ['circle'],
+      shapes: ['circle', 'square', 'square'],
     })
 
     makeShot(0.1, {
@@ -57,13 +57,13 @@ export const FireCracker: FC<FireCrackerProps> = ({isLoading}) => {
       startVelocity: 25,
       decay: 0.92,
       scalar: 1.2,
-      shapes: ['circle'],
+      shapes: ['circle', 'square', 'square'],
     })
 
     makeShot(0.1, {
       spread: 140,
       startVelocity: 45,
-      shapes: ['circle'],
+      shapes: ['circle', 'square', 'square'],
     })
   }, [makeShot])
 
