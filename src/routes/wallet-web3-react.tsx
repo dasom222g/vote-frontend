@@ -10,40 +10,43 @@ const WalletConnect: FC = () => {
   const { pathname: path } = useLocation()
 
   const { chain, account } = useChain()
-  const { authenticate, isAuthenticated, isAuthenticating, Moralis } = useMoralis()
+  const { authenticate, logout, isAuthenticated, isAuthenticating, user } =
+    useMoralis()
   const [winnerList, setWinnerList] = useState<ICountItem[]>([])
 
   const login = async () => {
     try {
-      await authenticate({ signingMessage: CONNECT_MESSAGE })
+      await authenticate({
+        signingMessage: `${CONNECT_MESSAGE}`,
+      })
     } catch (error) {
       console.error(error)
     }
   }
 
-  const handleWalletConnect = async () => {
-    try {
-      const user = await Moralis.authenticate({
-        provider: 'walletconnect',
-        mobileLinks: [
-          'rainbow',
-          'metamask',
-          'trust',
-        ],
-        chainId: 56,
-      })
-      console.log('user', user)
-    } catch(error) {
-      console.error(error)
-      // console.log(typeof error, error.message)
-    }
-  }
+  // const handleWalletConnect = async () => {
+  //   try {
+  //     const user = await Moralis.authenticate({
+  //       provider: 'walletconnect',
+  //       mobileLinks: [
+  //         'rainbow',
+  //         'metamask',
+  //         'trust',
+  //       ],
+  //       chainId: 56,
+  //     })
+  //     console.log('user', user)
+  //   } catch(error) {
+  //     console.error(error)
+  //   }
+  // }
 
   const handleChageChain = useCallback(() => {
     console.log('handleChageChain', chain && chain.nativeCurrency.symbol)
   }, [chain])
 
   const handleChangeAccount = useCallback(() => {
+    // 화면 진입시에는 실행안되며 지갑에서 account변경시 실행
     console.log('account', account)
   }, [account])
 
@@ -54,7 +57,6 @@ const WalletConnect: FC = () => {
   useEffect(() => {
     handleChageChain()
     handleChangeAccount()
-    isAuthenticated && goVote()
   }, [
     chain,
     account,
@@ -105,20 +107,20 @@ const WalletConnect: FC = () => {
           </svg>
         </div>
       )}
-      {
-        !isAuthenticated && (
-          <div className="h-full flex flex-col flex-auto">
-            <div className="text-white text-center">
-              <h2 className="text-lg font-bold py-2">
-                Please vote after Connect with wallet
-              </h2>
-              <p>
-                Connect with one of our available wallet providers and Vote to
-                your singer.
-              </p>
-            </div>
-            <WinnerCard winnerList={winnerList} path={path} />
-            <div className="mt-auto">
+      <div className="h-full flex flex-col">
+        <div className="text-white text-center">
+          <h2 className="text-lg font-bold py-2">
+            Please vote after Connect with wallet
+          </h2>
+          <p>
+            Connect with one of our available wallet providers and Vote to your
+            singer.
+          </p>
+        </div>
+        <WinnerCard winnerList={winnerList} path={path} />
+        <div className="mt-auto">
+          {!isAuthenticated ? (
+            <div className="mt-2">
               <button
                 type="button"
                 className={`bg-gradient-to-r from-indigo-500 via-pink-600 to-pink-500 text-slate-100 font-bold text-sm rounded-md w-full py-3 text-white`}
@@ -127,52 +129,35 @@ const WalletConnect: FC = () => {
                 Connect Metamask
               </button>
             </div>
-            <div className="mt-2">
-              <button
-                type="button"
-                className={`bg-gradient-to-r from-indigo-500 via-pink-600 to-pink-500 text-slate-100 font-bold text-sm rounded-md w-full py-3 text-white`}
-                onClick={handleWalletConnect}
-              >
-                Connet with walletconnect
-              </button>
-            </div>
-            {/* <div className="mt-2">
-              <button
-                type="button"
-                className={`bg-gradient-to-r from-indigo-500 via-pink-600 to-pink-500 text-slate-100 font-bold text-sm rounded-md w-full py-3 text-white`}
-                disabled={isAuthenticating}
-                onClick={() => logout()}
-              >
-                Disconnect
-              </button>
-            </div> */}
-          </div>
-        )
-        // <>
-        //   {/* <p className="text-sm">Account: {user && user.get('ethAddress')}</p> */}
-        //   <p className="text-sm">Account: {account || user!.get('ethAddress')}</p>
-        //   <div className="mt-2">
-        //     <button
-        //       type="button"
-        //       className={`bg-gradient-to-r from-indigo-500 via-pink-600 to-pink-500 text-slate-100 font-bold text-sm rounded-md w-full py-3 text-white`}
-        //       disabled={isAuthenticating}
-        //       onClick={() => logout()}
-        //     >
-        //       Disconnect
-        //     </button>
-        //   </div>
-        //   <div className="mt-2">
-        //     <button
-        //       type="button"
-        //       className={`bg-gradient-to-r from-indigo-500 via-pink-600 to-pink-500 text-slate-100 font-bold text-sm rounded-md w-full py-3 text-white`}
-        //       disabled={isAuthenticating}
-        //       onClick={() => switchNetwork("0x1")}
-        //     >
-        //       Change to Ethereum Mainnet
-        //     </button>
-        //   </div>
-        // </>
-      }
+          ) : (
+            <>
+              <p className="text-sm text-white">
+                Account: {(user && user.get('ethAddress')) || account}
+              </p>
+              <div className="mt-2">
+                <button
+                  type="button"
+                  className={`bg-gradient-to-r from-indigo-500 via-pink-600 to-pink-500 text-slate-100 font-bold text-sm rounded-md w-full py-3 text-white`}
+                  disabled={isAuthenticating}
+                  onClick={() => logout()}
+                >
+                  Disconnect
+                </button>
+              </div>
+              <div className="pt-2">
+                <button
+                  type="button"
+                  className={`bg-gradient-to-r from-indigo-500 via-pink-600 to-pink-500 text-slate-100 font-bold text-sm rounded-md w-full py-3 text-white`}
+                  disabled={isAuthenticating}
+                  onClick={goVote}
+                >
+                  Go to vote
+                </button>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
     </>
   )
 }
